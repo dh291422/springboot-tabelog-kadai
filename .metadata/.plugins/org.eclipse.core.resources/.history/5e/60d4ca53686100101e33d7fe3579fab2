@@ -1,0 +1,12 @@
+package com.example.nagoyameshi.repository;
+
+import com.example.nagoyameshi.entity.Company;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+public interface CompanyRepository extends JpaRepository<Company, Long> {
+
+    // 最新（idが最大）のレコード1件取得
+    @Query("SELECT c FROM Company c ORDER BY c.id DESC LIMIT 1")
+    Company findLatest();
+}

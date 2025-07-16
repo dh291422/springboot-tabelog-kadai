@@ -1,0 +1,20 @@
+package com.example.nagoyameshi.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class CompanyController {
+
+    // 誰でも見られる会社情報ページ
+    @GetMapping("/company")
+    public String showCompanyPage() {
+        return "company/company";
+    }
+
+    // 管理者だけが使える編集ページ（これから作成予定）
+    @GetMapping("/company/edit")
+    public String editCompanyPage() {
+        return "company/edit"; // ← あとでedit.htmlも作ろうね♡
+    }
+}

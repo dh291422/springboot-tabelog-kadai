@@ -1,0 +1,65 @@
+package com.example.nagoyameshi.controller;
+
+import jakarta.validation.Valid;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.example.nagoyameshi.entity.Company;
+import com.example.nagoyameshi.form.CompanyForm;
+import com.example.nagoyameshi.service.CompanyService;
+
+@Controller
+public class CompanyController {
+
+    private final CompanyService companyService;
+
+    public CompanyController(CompanyService companyService) {
+        this.companyService = companyService;
+    }
+
+    // 最新の会社情報（最後に登録されたもの）を表示
+    @GetMapping("/company")
+    public String showCompanyPage(Model model) {
+        model.addAttribute("company", companyService.getLatestCompany());
+        return "company/company";
+    }
+
+    // 編集フォームの表示（空のフォームで新規追加）
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/company/edit")
+    public String editCompanyForm(Model model) {
+        model.addAttribute("companyForm", new CompanyForm()); // 空のフォーム
+        return "company/edit";
+    }
+
+    // 編集フォームの送信（POST）→ 新規登録
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/company/edit")
+    public String submitCompanyForm(@ModelAttribute("companyForm") @Valid CompanyForm companyForm,
+                                    BindingResult bindingResult,
+                                    Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errorMessage", "入力に誤りがあります。");
+            return "company/edit";
+        }
+
+        Company company = new Company();
+
+        company.setName(companyForm.getName());
+        company.setRepresentative(companyForm.getCeo());
+        company.setEstablishmentDate(companyForm.getEstablished());
+        company.setPostalCode(companyForm.getPostal());
+        company.setAddress(companyForm.getAddress());
+        company.setBusiness(companyForm.getBusiness());
+
+        companyService.saveCompany(company);
+
+        return "redirect:/company";
+    }
+}

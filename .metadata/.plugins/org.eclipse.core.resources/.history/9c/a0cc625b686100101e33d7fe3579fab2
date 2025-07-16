@@ -1,0 +1,32 @@
+package com.example.nagoyameshi.form;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+import lombok.Data;
+
+@Data
+public class CompanyForm {
+
+    @NotBlank(message = "会社名を入力してください。")
+    private String name;
+
+    @NotBlank(message = "代表者を入力してください。")
+    private String ceo;
+
+    @NotBlank(message = "設立日を入力してください。")
+    private String established;
+
+    @NotBlank(message = "郵便番号を入力してください。")
+    @Size(min = 7, max = 8, message = "郵便番号は7〜8桁で入力してください。")
+    private String postal;
+
+    @NotBlank(message = "住所を入力してください。")
+    private String address;
+
+    @NotBlank(message = "事業内容を入力してください。")
+    private String business;
+    
+    private Long id;  // ←追加！
+
+}

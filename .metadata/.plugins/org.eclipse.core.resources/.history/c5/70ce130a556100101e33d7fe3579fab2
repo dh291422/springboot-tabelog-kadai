@@ -1,0 +1,64 @@
+package com.example.nagoyameshi.controller;
+
+import jakarta.validation.Valid;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.example.nagoyameshi.entity.Company;
+import com.example.nagoyameshi.form.CompanyForm;
+import com.example.nagoyameshi.service.CompanyService;
+
+@Controller
+public class CompanyController {
+
+    private final CompanyService companyService;
+
+    public CompanyController(CompanyService companyService) {
+        this.companyService = companyService;
+    }
+
+    // 誰でも見られる会社情報ページ
+    @GetMapping("/company")
+    public String showCompanyPage(Model model) {
+        model.addAttribute("company", companyService.getCompany());
+        return "company/company";
+    }
+    
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/company/edit")
+    public String editCompanyForm(Model model) {
+        Company company = companyService.findById(1);
+        CompanyForm form = new CompanyForm();
+
+        form.setName(company.getName());
+        form.setCeo(company.getRepresentative());
+        form.setEstablished(company.getEstablishmentDate());
+        form.setPostal(company.getPostalCode());
+        form.setAddress(company.getAddress());
+        form.setBusiness(company.getBusiness());
+
+        model.addAttribute("companyForm", form);
+        return "company/edit";
+    }
+
+    // 管理者だけが使える編集処理（POST）
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/company/edit")
+    public String updateCompany(@ModelAttribute("company") @Valid Company company,
+                                BindingResult bindingResult,
+                                Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errorMessage", "入力に誤りがあります。");
+            return "company/edit";
+        }
+
+        companyService.updateCompany(company);
+        return "redirect:/company";
+    }
+}

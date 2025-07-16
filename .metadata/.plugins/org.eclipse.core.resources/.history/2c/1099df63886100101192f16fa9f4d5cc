@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <title>解約完了</title>
+</head>
+<body>
+    <h1>解約が完了しました</h1>
+    <p>サブスクリプションの解約が正常に処理されました。</p>
+    <p>またのご利用をお待ちしております。</p>
+    <a href="/subscription">有料会員登録ページへ戻る</a>
+</body>
+</html>

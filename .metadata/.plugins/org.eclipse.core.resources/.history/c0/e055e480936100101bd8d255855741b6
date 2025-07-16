@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>パスワード再設定リクエスト</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <div class="nagoyameshi-reset-wrapper">
+        <div class="nagoyameshi-reset-form">
+            <h2 class="reset-title">パスワードをお忘れですか？</h2>
+
+            <p class="reset-description">登録済みのメールアドレスを入力してください。<br>再設定用のリンクをメールでお送りします。</p>
+
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+            <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+            <form th:action="@{/password/reset/request}" method="post" class="reset-form">
+                <input type="email" name="email" class="form-control reset-input" placeholder="メールアドレス" required />
+
+                <button type="submit" class="btn nagoyameshi-btn reset-button">再設定メールを送信</button>
+            </form>
+
+            <div class="reset-link">
+                <a th:href="@{/login}">ログイン画面に戻る</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

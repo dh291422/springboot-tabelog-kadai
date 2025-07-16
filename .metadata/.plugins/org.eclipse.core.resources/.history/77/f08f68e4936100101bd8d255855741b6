@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <title>解約完了</title>
+    <style>
+        body {
+            font-family: "Noto Sans JP", sans-serif;
+            text-align: center;
+            margin-top: 100px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>解約が完了しました</h1>
+    <p>サブスクリプションの解約が正常に処理されました。</p>
+    <p>お手数ですが、再ログインをお願いします。</p>
+    <button onclick="location.href='/login'">ログイン画面へ</button>
+    <p>またのご利用をお待ちしております。</p>
+</body>
+</html>

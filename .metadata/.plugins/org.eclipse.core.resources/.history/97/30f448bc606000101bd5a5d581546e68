@@ -1,0 +1,19 @@
+package com.example.nagoyameshi.controller;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
+import com.example.nagoyameshi.security.UserDetailsImpl;
+
+@ControllerAdvice
+public class GlobalControllerAdvice {
+
+    @ModelAttribute
+    public void addLoginUserToModel(Model model, @AuthenticationPrincipal UserDetailsImpl loginUser) {
+        if (loginUser != null) {
+            model.addAttribute("loginUser", loginUser.getUser());
+        }
+    }
+}

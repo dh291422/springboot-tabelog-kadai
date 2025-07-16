@@ -1,0 +1,40 @@
+package com.example.nagoyameshi.service;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.example.nagoyameshi.entity.Company;
+import com.example.nagoyameshi.repository.CompanyRepository;
+
+@Service
+public class CompanyService {
+
+    private final CompanyRepository companyRepository;
+
+    public CompanyService(CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
+    }
+
+    // データベースに保存（新規登録）
+    public void saveCompany(Company company) {
+        companyRepository.save(company);
+    }
+
+    // 最新の会社情報（IDが一番大きいレコード）を取得
+    public Company getLatestCompany() {
+        List<Company> companies = companyRepository.findAll();
+
+        return companies.stream()
+                .max(Comparator.comparing(Company::getId))
+                .orElse(null); // データがなければ null を返す
+    }
+
+    // 必要があれば特定のIDで検索
+    public Company findById(Long id) {
+        Optional<Company> optionalCompany = companyRepository.findById(id);
+        return optionalCompany.orElse(null);
+    }
+}

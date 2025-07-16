@@ -1,0 +1,52 @@
+package com.example.nagoyameshi.service;
+
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.nagoyameshi.entity.Company;
+import com.example.nagoyameshi.form.CompanyForm;
+import com.example.nagoyameshi.repository.CompanyRepository;
+
+@Service
+@Transactional
+public class CompanyService {
+
+    private final CompanyRepository companyRepository;
+
+    public CompanyService(CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
+    }
+
+    public CompanyForm getCompany() {
+        Optional<Company> optional = companyRepository.findById(1L);
+        CompanyForm form = new CompanyForm();
+
+        if (optional.isPresent()) {
+            Company c = optional.get();
+            form.setId(c.getId());
+            form.setName(c.getName());
+            form.setCeo(c.getCeo());
+            form.setEstablished(c.getEstablished());
+            form.setPostal(c.getPostal());
+            form.setAddress(c.getAddress());
+            form.setBusiness(c.getBusiness());
+        }
+        return form;
+    }
+
+    public void updateCompany(CompanyForm form) {
+        Company company = companyRepository.findById(form.getId()).orElse(new Company());
+
+        company.setId(form.getId());
+        company.setName(form.getName());
+        company.setCeo(form.getCeo());
+        company.setEstablished(form.getEstablished());
+        company.setPostal(form.getPostal());
+        company.setAddress(form.getAddress());
+        company.setBusiness(form.getBusiness());
+
+        companyRepository.save(company);
+    }
+}

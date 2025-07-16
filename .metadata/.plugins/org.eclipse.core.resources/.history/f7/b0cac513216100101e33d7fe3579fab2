@@ -1,0 +1,25 @@
+package com.example.nagoyameshi.entity;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Data
+public class Company {
+
+    @Id
+    private Long id = 1L; // 常に1件だけ扱う前提（シングルトンのように使う）
+
+    @Column(nullable = false)
+    private String name;
+
+    private String representative;
+
+    private String establishmentDate;
+
+    private String postalCode;
+
+    private String address;
+
+    private String business;
+}

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <title>登録成功</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <div class="subscription-wrapper">
+        <h1>ご登録ありがとうございました！</h1>
+        <p>サブスクリプションの登録が完了しました。</p>
+        <p>お手数ですが、再ログインをお願いします。</p>
+        <button class="subscription-button" onclick="location.href='/login'">ログイン画面へ</button>
+    </div>
+</body>
+</html>

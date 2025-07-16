@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">    
+<head>
+    <div th:replace="~{fragment :: meta}"></div>   
+    <div th:replace="~{fragment :: styles}"></div>
+    <title>有料会員登録（300円/月）</title>   
+</head>
+<body>
+<div class="nagoyameshi-wrapper">
+    <!-- ヘッダー -->
+    <div th:replace="~{fragment :: header}"></div>
+    
+    <main>
+        <div class="container pt-4 pb-5 nagoyameshi-container">
+            <div class="row justify-content-center">
+                <div class="col-xl-6 col-lg-7 col-md-9">
+                    <h1 class="mb-4 text-center">有料会員登録</h1>
+                    
+                    <div class="alert alert-info text-center">
+                        月額 <strong>300円</strong> でプレミアム機能をご利用いただけます。
+                    </div>
+
+                    <div class="card p-4 shadow-sm">
+                        <h5 class="mb-3">特典内容</h5>
+                        <ul>
+                            <li>先行予約機能の利用</li>
+                            <li>店舗のレビュー投稿</li>
+                        </ul>
+
+                        <div class="mt-4 text-center">
+                            <button id="paymentButton" class="btn nagoyameshi-btn w-100 shadow-sm text-white">
+                                月額300円で登録する
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+    </main>
+    
+    <!-- フッター -->
+    <div th:replace="~{fragment :: footer}"></div>
+</div>    
+
+<div th:replace="~{fragment :: scripts}"></div>  
+<script src="https://js.stripe.com/v3"></script>
+<script th:inline="javascript">
+    const sessionId = /*[[${sessionId}]]*/ "session_id"; // コントローラから渡されたセッションID
+    const stripe = Stripe(/*[[${publicKey}]]*/ 'your-publishable-key-here');
+
+    document.getElementById("paymentButton").addEventListener("click", function () {
+        stripe.redirectToCheckout({ sessionId: sessionId })
+            .then(function (result) {
+                if (result.error) {
+                    alert(result.error.message);
+                }
+            });
+    });
+</script>
+</body>
+</html>

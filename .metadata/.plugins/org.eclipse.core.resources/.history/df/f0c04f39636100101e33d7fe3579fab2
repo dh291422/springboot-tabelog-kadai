@@ -1,0 +1,36 @@
+package com.example.nagoyameshi.service;
+
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.example.nagoyameshi.entity.Company;
+import com.example.nagoyameshi.repository.CompanyRepository;
+
+@Service
+public class CompanyService {
+
+    private final CompanyRepository companyRepository;
+
+    public CompanyService(CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
+    }
+
+    // 会社情報を取得（常にID=1の1件のみと仮定）
+    public Company getCompany() {
+        Optional<Company> optionalCompany = companyRepository.findById(1L);
+        return optionalCompany.orElseGet(() -> {
+            // まだレコードが存在しない場合は仮で新しいCompanyを作成して返す
+            Company newCompany = new Company();
+            newCompany.setId(1L);
+            return newCompany;
+        });
+    }
+
+    // 会社情報を更新
+    public void updateCompany(Company company) {
+        company.setId(1L); // 常にID=1として保存
+        companyRepository.save(company);
+    }
+
+}

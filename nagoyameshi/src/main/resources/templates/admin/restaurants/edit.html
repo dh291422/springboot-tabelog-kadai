@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+   <head>
+	   <title>店舗情報編集</title>
+       <th:block th:replace="~{fragment :: meta}"></th:block>   
+            
+       <th:block th:replace="~{fragment :: styles}"></th:block>              
+   </head>
+   <body>
+       <div class="nagoyameshi-wrapper">
+           <!-- ヘッダー -->
+           <div th:replace="~{fragment :: header}"></div>
+           
+           <main>
+               <div class="container pt-4 pb-5 nagoyameshi-container">
+                   <div class="row justify-content-center">
+                       <div class="col-xl-5 col-lg-6 col-md-8">
+                           <nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                               <ol class="breadcrumb mb-0"> 
+                                   <li class="breadcrumb-item"><a th:href="@{/admin/restaurants}">店舗一覧</a></li>  
+                                   <li class="breadcrumb-item"><a th:href="@{/admin/restaurants/{id}(id=${restaurantEditForm.id})}">店舗詳細</a></li>                                                           
+                                   <li class="breadcrumb-item active" aria-current="page">店舗情報編集</li>
+                               </ol>
+                           </nav> 
+                           
+                           <h1 class="mb-4 text-center">店舗情報編集</h1>         
+                           
+                           <form method="post" th:action="@{/admin/restaurants/{id}/update(id=${restaurantEditForm.id})}" th:object="${restaurantEditForm}" enctype="multipart/form-data">
+                               <input type="hidden" th:field="*{id}">
+                                                                                        
+                               <div class="form-group row mb-3">
+                                   <div class="col-md-4">
+                                       <label for="name" class="col-form-label text-md-left fw-bold">店舗名</label>
+                                   </div>
+                                   <div class="col-md-8">                                    
+                                       <div th:if="${#fields.hasErrors('name')}" class="text-danger small mb-2" th:errors="*{name}"></div>                                    
+                                       <input type="text" class="form-control" th:field="*{name}" autofocus>
+                                   </div>
+                               </div>
+                               
+							   <div class="form-group row mb-3">
+							       <div class="col-md-4">
+							           <label for="imageFile" class="col-form-label text-md-left fw-bold">店舗画像</label>
+							       </div>                                    
+							       <div class="col-md-8">
+							           <div th:if="${#fields.hasErrors('imageFile')}" class="text-danger small mb-2" th:errors="*{imageFile}"></div>  
+							           							           
+							           <input type="hidden" th:field="*{imageName}"/>
+							
+							           <input type="file" class="form-control" th:field="*{imageFile}">
+							       </div>
+							   </div>   
+
+							   <!-- 選択された画像の表示場所 -->
+							   <div class="row" id="imagePreview">
+							       <div th:if="*{imageName}">
+							           <img th:src="@{'/storage/' + *{imageName}}" class="mb-3" style="max-width: 100%;">
+							       </div>
+							   </div>
+                               
+                               <div class="form-group row mb-3">
+                                   <div class="col-md-4">
+                                       <label for="description" class="col-form-label text-md-left fw-bold">説明</label>
+                                   </div>
+                                   <div class="col-md-8">                            
+                                       <div th:if="${#fields.hasErrors('description')}" class="text-danger small mb-2" th:errors="*{description}"></div>                                        
+                                       <textarea class="form-control" th:field="*{description}" cols="30" rows="5"></textarea>
+                                   </div>
+                               </div>
+                               
+                               <div class="form-group row mb-3">
+                                   <div class="col-md-4">
+                                       <label for="lowestPrice" class="col-form-label text-md-left fw-bold">最低価格帯（単位：円）</label>
+                                   </div> 
+                                   <div class="col-md-8">
+                                       <div th:if="${#fields.hasErrors('lowestPrice')}" class="text-danger small mb-2" th:errors="*{lowestPrice}"></div>
+                                       <input type="number" class="form-control" th:field="*{lowestPrice}">                                
+                                   </div>                                    
+                               </div>
+							   
+							   <div class="form-group row mb-3">
+							       <div class="col-md-4">
+							           <label for="highestPrice" class="col-form-label text-md-left fw-bold">最高価格帯（単位：円）</label>
+							       </div> 
+							       <div class="col-md-8">
+							           <div th:if="${#fields.hasErrors('highestPrice')}" class="text-danger small mb-2" th:errors="*{highestPrice}"></div>
+							           <input type="number" class="form-control" th:field="*{highestPrice}">                                
+							       </div>                                    
+							   </div>
+							   
+                               <div class="form-group row mb-3">
+                                   <div class="col-md-4">
+                                       <label for="capacity" class="col-form-label text-md-left fw-bold">座席数（単位：席）</label>
+                                   </div> 
+                                   <div class="col-md-8">
+                                       <div th:if="${#fields.hasErrors('capacity')}" class="text-danger small mb-2" th:errors="*{capacity}"></div>
+                                       <input type="number" class="form-control" th:field="*{capacity}">                                
+                                   </div>                                    
+                               </div>                                                                
+                                                                                                                       
+                               <div class="form-group row mb-3">
+                                   <div class="col-md-4">
+                                       <label for="postalCode" class="col-form-label text-md-left fw-bold">郵便番号</label>
+                                   </div>
+                                   <div class="col-md-8">
+                                       <div th:if="${#fields.hasErrors('postalCode')}" class="text-danger small mb-2" th:errors="*{postalCode}"></div>
+                                       <input type="text" class="form-control" th:field="*{postalCode}">
+                                   </div>
+                               </div>
+                                                                                                             
+                               <div class="form-group row mb-3">
+                                   <div class="col-md-4">
+                                       <label for="address" class="col-form-label text-md-left fw-bold">住所</label>
+                                   </div>
+                                   <div class="col-md-8">
+                                       <div th:if="${#fields.hasErrors('address')}" class="text-danger small mb-2" th:errors="*{address}"></div>
+                                       <input type="text" class="form-control" th:field="*{address}">  
+                                   </div>
+                               </div>                                                                                
+                               
+                               <div class="form-group row mb-3">
+                                   <div class="col-md-4">
+                                       <label for="phoneNumber" class="col-form-label text-md-left fw-bold">電話番号</label>
+                                   </div>
+                                   <div class="col-md-8">
+                                       <div th:if="${#fields.hasErrors('phoneNumber')}" class="text-danger small mb-2" th:errors="*{phoneNumber}"></div>
+                                       <input type="text" class="form-control" th:field="*{phoneNumber}">                                
+                                   </div>
+                               </div>
+							   
+							   <!-- 開店時間 -->
+							   <div class="form-group row mb-3">
+							       <div class="col-md-4">
+							           <label for="openTime" class="col-form-label text-md-left fw-bold">開店時間</label>
+							       </div>
+							       <div class="col-md-8">
+							           <select class="form-select" th:field="*{openTime}" required>
+							               <option value="" hidden>選択してください</option>
+							               <option value="00:00" th:selected="${openTime == '00:00'}">00:00</option>
+							               <option value="00:30" th:selected="${openTime == '00:30'}">00:30</option>
+							               <option value="01:00" th:selected="${openTime == '01:00'}">01:00</option>
+							               <option value="01:30" th:selected="${openTime == '01:30'}">01:30</option>
+							               <option value="02:00" th:selected="${openTime == '02:00'}">02:00</option>
+							               <option value="02:30" th:selected="${openTime == '02:30'}">02:30</option>
+							               <option value="03:00" th:selected="${openTime == '03:00'}">03:00</option>
+							               <option value="03:30" th:selected="${openTime == '03:30'}">03:30</option>
+							               <option value="04:00" th:selected="${openTime == '04:00'}">04:00</option>
+							               <option value="04:30" th:selected="${openTime == '04:30'}">04:30</option>
+							               <option value="05:00" th:selected="${openTime == '05:00'}">05:00</option>
+							               <option value="05:30" th:selected="${openTime == '05:30'}">05:30</option>
+							               <option value="06:00" th:selected="${openTime == '06:00'}">06:00</option>
+							               <option value="06:30" th:selected="${openTime == '06:30'}">06:30</option>
+							               <option value="07:00" th:selected="${openTime == '07:00'}">07:00</option>
+							               <option value="07:30" th:selected="${openTime == '07:30'}">07:30</option>
+							               <option value="08:00" th:selected="${openTime == '08:00'}">08:00</option>
+							               <option value="08:30" th:selected="${openTime == '08:30'}">08:30</option>
+							               <option value="09:00" th:selected="${openTime == '09:00'}">09:00</option>
+							               <option value="09:30" th:selected="${openTime == '09:30'}">09:30</option>
+							               <option value="10:00" th:selected="${openTime == '10:00'}">10:00</option>
+							               <option value="10:30" th:selected="${openTime == '10:30'}">10:30</option>
+							               <option value="11:00" th:selected="${openTime == '11:00'}">11:00</option>
+							               <option value="11:30" th:selected="${openTime == '11:30'}">11:30</option>
+							               <option value="12:00" th:selected="${openTime == '12:00'}">12:00</option>
+							               <option value="12:30" th:selected="${openTime == '12:30'}">12:30</option>
+							               <option value="13:00" th:selected="${openTime == '13:00'}">13:00</option>
+							               <option value="13:30" th:selected="${openTime == '13:30'}">13:30</option>
+							               <option value="14:00" th:selected="${openTime == '14:00'}">14:00</option>
+							               <option value="14:30" th:selected="${openTime == '14:30'}">14:30</option>
+							               <option value="15:00" th:selected="${openTime == '15:00'}">15:00</option>
+							               <option value="15:30" th:selected="${openTime == '15:30'}">15:30</option>
+							               <option value="16:00" th:selected="${openTime == '16:00'}">16:00</option>
+							               <option value="16:30" th:selected="${openTime == '16:30'}">16:30</option>
+							               <option value="17:00" th:selected="${openTime == '17:00'}">17:00</option>
+							               <option value="17:30" th:selected="${openTime == '17:30'}">17:30</option>
+							               <option value="18:00" th:selected="${openTime == '18:00'}">18:00</option>
+							               <option value="18:30" th:selected="${openTime == '18:30'}">18:30</option>
+							               <option value="19:00" th:selected="${openTime == '19:00'}">19:00</option>
+							               <option value="19:30" th:selected="${openTime == '19:30'}">19:30</option>
+							               <option value="20:00" th:selected="${openTime == '20:00'}">20:00</option>
+							               <option value="20:30" th:selected="${openTime == '20:30'}">20:30</option>
+							               <option value="21:00" th:selected="${openTime == '21:00'}">21:00</option>
+							               <option value="21:30" th:selected="${openTime == '21:30'}">21:30</option>
+							               <option value="22:00" th:selected="${openTime == '22:00'}">22:00</option>
+							               <option value="22:30" th:selected="${openTime == '22:30'}">22:30</option>
+							               <option value="23:00" th:selected="${openTime == '23:00'}">23:00</option>
+							               <option value="23:30" th:selected="${openTime == '23:30'}">23:30</option>
+							           </select>
+							       </div>
+							   </div>
+
+							   <!-- 閉店時間 -->
+							   <div class="form-group row mb-3">
+							       <div class="col-md-4">
+							           <label for="closeTime" class="col-form-label text-md-left fw-bold">閉店時間</label>
+							       </div>
+							       <div class="col-md-8">
+							           <select class="form-select" th:field="*{closeTime}" required>
+							               <option value="" hidden>選択してください</option>
+							               <option value="00:00" th:selected="${closeTime == '00:00'}">00:00</option>
+							               <option value="00:30" th:selected="${closeTime == '00:30'}">00:30</option>
+							               <option value="01:00" th:selected="${closeTime == '01:00'}">01:00</option>
+							               <option value="01:30" th:selected="${closeTime == '01:30'}">01:30</option>
+							               <option value="02:00" th:selected="${closeTime == '02:00'}">02:00</option>
+							               <option value="02:30" th:selected="${closeTime == '02:30'}">02:30</option>
+							               <option value="03:00" th:selected="${closeTime == '03:00'}">03:00</option>
+							               <option value="03:30" th:selected="${closeTime == '03:30'}">03:30</option>
+							               <option value="04:00" th:selected="${closeTime == '04:00'}">04:00</option>
+							               <option value="04:30" th:selected="${closeTime == '04:30'}">04:30</option>
+							               <option value="05:00" th:selected="${closeTime == '05:00'}">05:00</option>
+							               <option value="05:30" th:selected="${closeTime == '05:30'}">05:30</option>
+							               <option value="06:00" th:selected="${closeTime == '06:00'}">06:00</option>
+							               <option value="06:30" th:selected="${closeTime == '06:30'}">06:30</option>
+							               <option value="07:00" th:selected="${closeTime == '07:00'}">07:00</option>
+							               <option value="07:30" th:selected="${closeTime == '07:30'}">07:30</option>
+							               <option value="08:00" th:selected="${closeTime == '08:00'}">08:00</option>
+							               <option value="08:30" th:selected="${closeTime == '08:30'}">08:30</option>
+							               <option value="09:00" th:selected="${closeTime == '09:00'}">09:00</option>
+							               <option value="09:30" th:selected="${closeTime == '09:30'}">09:30</option>
+							               <option value="10:00" th:selected="${closeTime == '10:00'}">10:00</option>
+							               <option value="10:30" th:selected="${closeTime == '10:30'}">10:30</option>
+							               <option value="11:00" th:selected="${closeTime == '11:00'}">11:00</option>
+							               <option value="11:30" th:selected="${closeTime == '11:30'}">11:30</option>
+							               <option value="12:00" th:selected="${closeTime == '12:00'}">12:00</option>
+							               <option value="12:30" th:selected="${closeTime == '12:30'}">12:30</option>
+							               <option value="13:00" th:selected="${closeTime == '13:00'}">13:00</option>
+							               <option value="13:30" th:selected="${closeTime == '13:30'}">13:30</option>
+							               <option value="14:00" th:selected="${closeTime == '14:00'}">14:00</option>
+							               <option value="14:30" th:selected="${closeTime == '14:30'}">14:30</option>
+							               <option value="15:00" th:selected="${closeTime == '15:00'}">15:00</option>
+							               <option value="15:30" th:selected="${closeTime == '15:30'}">15:30</option>
+							               <option value="16:00" th:selected="${closeTime == '16:00'}">16:00</option>
+							               <option value="16:30" th:selected="${closeTime == '16:30'}">16:30</option>
+							               <option value="17:00" th:selected="${closeTime == '17:00'}">17:00</option>
+							               <option value="17:30" th:selected="${closeTime == '17:30'}">17:30</option>
+							               <option value="18:00" th:selected="${closeTime == '18:00'}">18:00</option>
+							               <option value="18:30" th:selected="${closeTime == '18:30'}">18:30</option>
+							               <option value="19:00" th:selected="${closeTime == '19:00'}">19:00</option>
+							               <option value="19:30" th:selected="${closeTime == '19:30'}">19:30</option>
+							               <option value="20:00" th:selected="${closeTime == '20:00'}">20:00</option>
+							               <option value="20:30" th:selected="${closeTime == '20:30'}">20:30</option>
+							               <option value="21:00" th:selected="${closeTime == '21:00'}">21:00</option>
+							               <option value="21:30" th:selected="${closeTime == '21:30'}">21:30</option>
+							               <option value="22:00" th:selected="${closeTime == '22:00'}">22:00</option>
+							               <option value="22:30" th:selected="${closeTime == '22:30'}">22:30</option>
+							               <option value="23:00" th:selected="${closeTime == '23:00'}">23:00</option>
+							               <option value="23:30" th:selected="${closeTime == '23:30'}">23:30</option>
+							           </select>
+							       </div>
+							   </div>
+
+							   <div class="form-group row mb-3">
+							     <div class="col-md-4">
+							       <label class="col-form-label text-md-left fw-bold">定休日</label>
+							     </div>
+							     <div class="col-md-8">
+							       <div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" th:field="*{regularHoliday}" value="月" id="holiday_mon"
+									       th:checked="${restaurantEditForm.regularHoliday != null and #lists.contains(restaurantEditForm.regularHoliday, '月')}" />
+									<label class="form-check-label" for="holiday_mon">月</label>
+							       </div>
+							       <div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" th:field="*{regularHoliday}" value="火" id="holiday_mon"
+									       th:checked="${restaurantEditForm.regularHoliday != null and #lists.contains(restaurantEditForm.regularHoliday, '火')}" />
+									<label class="form-check-label" for="holiday_mon">火</label>
+							       </div>
+							       <div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" th:field="*{regularHoliday}" value="水" id="holiday_mon"
+									       th:checked="${restaurantEditForm.regularHoliday != null and #lists.contains(restaurantEditForm.regularHoliday, '水')}" />
+									<label class="form-check-label" for="holiday_mon">水</label>
+							       </div>
+							       <div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" th:field="*{regularHoliday}" value="木" id="holiday_mon"
+									       th:checked="${restaurantEditForm.regularHoliday != null and #lists.contains(restaurantEditForm.regularHoliday, '木')}" />
+									<label class="form-check-label" for="holiday_mon">木</label>
+							       </div>
+							       <div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" th:field="*{regularHoliday}" value="金" id="holiday_mon"
+									       th:checked="${restaurantEditForm.regularHoliday != null and #lists.contains(restaurantEditForm.regularHoliday, '金')}" />
+									<label class="form-check-label" for="holiday_mon">金</label>
+							       </div>
+							       <div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" th:field="*{regularHoliday}" value="土" id="holiday_mon"
+									       th:checked="${restaurantEditForm.regularHoliday != null and #lists.contains(restaurantEditForm.regularHoliday, '土')}" />
+									<label class="form-check-label" for="holiday_mon">土</label>
+							       </div>
+							       <div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" th:field="*{regularHoliday}" value="日" id="holiday_mon"
+									       th:checked="${restaurantEditForm.regularHoliday != null and #lists.contains(restaurantEditForm.regularHoliday, '日')}" />
+									<label class="form-check-label" for="holiday_mon">日</label>
+							       </div>
+							       
+							       <div class="form-check form-check-inline">
+							         <input type="checkbox" class="form-check-input" id="noHolidayCheckbox" name="noHoliday" value="noHoliday" 
+							                th:checked="${restaurantEditForm.regularHoliday == null or #lists.isEmpty(restaurantEditForm.regularHoliday)}" />
+							         <label class="form-check-label" for="noHolidayCheckbox">年中無休</label>
+							       </div>
+							     </div>
+							   </div>
+							   
+							   <div class="form-group row mb-3">
+							       <div class="col-md-4">
+							           <label for="category" class="col-form-label text-md-left fw-bold">カテゴリ</label>
+							       </div>
+							       <div class="col-md-8">
+							           <div th:if="${#fields.hasErrors('category')}" class="text-danger small mb-2" th:errors="*{category}"></div>
+									   <input type="text" class="form-control" th:field="*{category}" placeholder="例）和食、洋食、中華（「、」で区切って入力）">                                
+							       </div>
+							   </div>
+                                                                                                                                                      
+                               <div class="form-group d-flex justify-content-center my-4">
+                                   <button type="submit" class="btn text-white shadow-sm w-50 nagoyameshi-btn">更新</button>
+                               </div>
+                           </form>                                                                         
+                       </div>
+                   </div>
+               </div>                 
+           </main>
+           
+           <!-- フッター -->
+           <div th:replace="~{fragment :: footer}"></div>
+       </div>    
+       
+       <div th:replace="~{fragment :: scripts}"></div>  
+       <script th:src="@{/js/preview.js}"></script>
+	   <script>
+	   document.addEventListener("DOMContentLoaded", function () {
+	       const noHolidayCheckbox = document.getElementById("noHolidayCheckbox");
+	       const weekdayChecks = document.querySelectorAll(".weekday-check");
+
+	       // 年中無休がチェックされたら曜日のチェック全部外す
+	       noHolidayCheckbox.addEventListener("change", () => {
+	           if (noHolidayCheckbox.checked) {
+	               weekdayChecks.forEach(cb => cb.checked = false);
+	           }
+	       });
+
+	       // 曜日チェックが1つでも選ばれたら年中無休のチェック外す
+	       weekdayChecks.forEach(cb => {
+	           cb.addEventListener("change", () => {
+	               if (cb.checked) {
+	                   noHolidayCheckbox.checked = false;
+	               }
+	           });
+	       });
+	   });
+	   </script>     
+   </body>
+</html>
