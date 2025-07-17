@@ -254,44 +254,44 @@
 							     </div>
 							     <div class="col-md-8">
 							       <div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" th:field="*{regularHoliday}" value="月" id="holiday_mon"
+									<input class="form-check-input weekday-checkbox" type="checkbox" th:field="*{regularHoliday}" value="月" id="holiday_mon"
 									       th:checked="${restaurantEditForm.regularHoliday != null and #lists.contains(restaurantEditForm.regularHoliday, '月')}" />
 									<label class="form-check-label" for="holiday_mon">月</label>
 							       </div>
 							       <div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" th:field="*{regularHoliday}" value="火" id="holiday_mon"
+									<input class="form-check-input weekday-checkbox" type="checkbox" th:field="*{regularHoliday}" value="火" id="holiday_tue"
 									       th:checked="${restaurantEditForm.regularHoliday != null and #lists.contains(restaurantEditForm.regularHoliday, '火')}" />
-									<label class="form-check-label" for="holiday_mon">火</label>
+									<label class="form-check-label" for="holiday_tue">火</label>
 							       </div>
 							       <div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" th:field="*{regularHoliday}" value="水" id="holiday_mon"
+									<input class="form-check-input weekday-checkbox" type="checkbox" th:field="*{regularHoliday}" value="水" id="holiday_wed"
 									       th:checked="${restaurantEditForm.regularHoliday != null and #lists.contains(restaurantEditForm.regularHoliday, '水')}" />
-									<label class="form-check-label" for="holiday_mon">水</label>
+									<label class="form-check-label" for="holiday_wed">水</label>
 							       </div>
 							       <div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" th:field="*{regularHoliday}" value="木" id="holiday_mon"
+									<input class="form-check-input weekday-checkbox" type="checkbox" th:field="*{regularHoliday}" value="木" id="holiday_thu"
 									       th:checked="${restaurantEditForm.regularHoliday != null and #lists.contains(restaurantEditForm.regularHoliday, '木')}" />
-									<label class="form-check-label" for="holiday_mon">木</label>
+									<label class="form-check-label" for="holiday_thu">木</label>
 							       </div>
 							       <div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" th:field="*{regularHoliday}" value="金" id="holiday_mon"
+									<input class="form-check-input weekday-checkbox" type="checkbox" th:field="*{regularHoliday}" value="金" id="holiday_fli"
 									       th:checked="${restaurantEditForm.regularHoliday != null and #lists.contains(restaurantEditForm.regularHoliday, '金')}" />
-									<label class="form-check-label" for="holiday_mon">金</label>
+									<label class="form-check-label" for="holiday_fli">金</label>
 							       </div>
 							       <div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" th:field="*{regularHoliday}" value="土" id="holiday_mon"
+									<input class="form-check-input weekday-checkbox" type="checkbox" th:field="*{regularHoliday}" value="土" id="holiday_sat"
 									       th:checked="${restaurantEditForm.regularHoliday != null and #lists.contains(restaurantEditForm.regularHoliday, '土')}" />
-									<label class="form-check-label" for="holiday_mon">土</label>
+									<label class="form-check-label" for="holiday_sat">土</label>
 							       </div>
 							       <div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" th:field="*{regularHoliday}" value="日" id="holiday_mon"
+									<input class="form-check-input weekday-checkbox" type="checkbox" th:field="*{regularHoliday}" value="日" id="holiday_sun"
 									       th:checked="${restaurantEditForm.regularHoliday != null and #lists.contains(restaurantEditForm.regularHoliday, '日')}" />
-									<label class="form-check-label" for="holiday_mon">日</label>
+									<label class="form-check-label" for="holiday_sun">日</label>
 							       </div>
 							       
 							       <div class="form-check form-check-inline">
-							         <input type="checkbox" class="form-check-input" id="noHolidayCheckbox" name="noHoliday" value="noHoliday" 
-							                th:checked="${restaurantEditForm.regularHoliday == null or #lists.isEmpty(restaurantEditForm.regularHoliday)}" />
+							         <input type="checkbox" class="form-check-input" id="noHolidayCheckbox" name="regularHoliday" value="年中無休" 
+							                th:checked="${restaurantEditForm.regularHoliday != null and #lists.contains(restaurantEditForm.regularHoliday, '年中無休')}" />
 							         <label class="form-check-label" for="noHolidayCheckbox">年中無休</label>
 							       </div>
 							     </div>
@@ -323,26 +323,38 @@
        <div th:replace="~{fragment :: scripts}"></div>  
        <script th:src="@{/js/preview.js}"></script>
 	   <script>
-	   document.addEventListener("DOMContentLoaded", function () {
-	       const noHolidayCheckbox = document.getElementById("noHolidayCheckbox");
-	       const weekdayChecks = document.querySelectorAll(".weekday-check");
+	      document.addEventListener("DOMContentLoaded", function () {
+	          const noHolidayCheckbox = document.getElementById("noHolidayCheckbox");
+	          const weekdayChecks = document.querySelectorAll(".form-check-input[name='regularHoliday']:not(#noHolidayCheckbox)");
 
-	       // 年中無休がチェックされたら曜日のチェック全部外す
-	       noHolidayCheckbox.addEventListener("change", () => {
-	           if (noHolidayCheckbox.checked) {
-	               weekdayChecks.forEach(cb => cb.checked = false);
-	           }
-	       });
+	          // ✅ 初期表示時に、曜日のチェックが全部外れていたら「年中無休」にチェックを入れる
+	          let anyWeekdayChecked = false;
+	          weekdayChecks.forEach(cb => {
+	              if (cb.checked) {
+	                  anyWeekdayChecked = true;
+	              }
+	          });
+	          if (!anyWeekdayChecked) {
+	              noHolidayCheckbox.checked = true;
+	          }
 
-	       // 曜日チェックが1つでも選ばれたら年中無休のチェック外す
-	       weekdayChecks.forEach(cb => {
-	           cb.addEventListener("change", () => {
-	               if (cb.checked) {
-	                   noHolidayCheckbox.checked = false;
-	               }
-	           });
-	       });
-	   });
-	   </script>     
+	          // 年中無休がチェックされたら曜日のチェック全部外す
+	          noHolidayCheckbox.addEventListener("change", () => {
+	              if (noHolidayCheckbox.checked) {
+	                  weekdayChecks.forEach(cb => cb.checked = false);
+	              }
+	          });
+
+	          // 曜日チェックが1つでも選ばれたら年中無休のチェック外す
+	          weekdayChecks.forEach(cb => {
+	              cb.addEventListener("change", () => {
+	                  if (cb.checked) {
+	                      noHolidayCheckbox.checked = false;
+	                  }
+	              });
+	          });
+	      });
+	   </script>
+     
    </body>
 </html>

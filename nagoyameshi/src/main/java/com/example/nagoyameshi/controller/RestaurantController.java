@@ -89,6 +89,16 @@ public class RestaurantController {
                     String target = "、" + category.trim() + "、";
                     return formatted.contains(target);
                 })
+                .sorted((r1, r2) -> {
+                    // ★ 並び替え処理を追加しよう！
+                    if ("lowestPriceAsc".equals(order)) {
+                        return r1.getLowestPrice().compareTo(r2.getLowestPrice());
+                    } else if ("lowestPriceDesc".equals(order)) {
+                        return r2.getLowestPrice().compareTo(r1.getLowestPrice());
+                    } else {
+                        return r2.getCreatedAt().compareTo(r1.getCreatedAt()); // 新着順（降順）
+                    }
+                })
                 .collect(Collectors.toList());
 
             restaurantPage = new PageImpl<>(filtered, pageable, filtered.size());

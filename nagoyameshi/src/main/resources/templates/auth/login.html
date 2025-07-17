@@ -15,7 +15,8 @@
            <main>
                <div class="container pt-4 pb-5 nagoyameshi-container">
                    <div class="row justify-content-center">        
-                       <div class="col-xl-3 col-lg-4 col-md-5 col-sm-7">                            
+                       <div class="col-xl-3 col-lg-4 col-md-5 col-sm-7">
+						<div th:if="${message}" class="alert alert-info text-center" th:text="${message}"></div>                            
                            <h1 class="mb-4 text-center">ログイン</h1>            
                        
                            <div th:if="${param.error}" class="alert alert-danger">
