@@ -4,6 +4,8 @@
 	<section name="java.lang.Class">
 		<item key="replaceBarOpen" value="false"/>
 		<list key="findhistory">
+			<item value="Url"/>
+			<item value="url"/>
 			<item value="form.setId"/>
 			<item value="form"/>
 			<item value="GENERAL"/>
@@ -17,8 +19,6 @@
 			<item value="&lt;a"/>
 			<item value="business"/>
 			<item value="&lt;input type=&quot;file&quot; name=&quot;attachment&quot;&gt;"/>
-			<item value="busine"/>
-			<item value="favoli"/>
 		</list>
 	</section>
 </section>

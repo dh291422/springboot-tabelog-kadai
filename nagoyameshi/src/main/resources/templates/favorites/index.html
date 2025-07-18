@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">    
 <head>
@@ -7,7 +6,7 @@
     <title>お気に入り一覧</title>   
 </head>
 <body>
-    <div class="nagoyameshi-wrapper">
+    <div class="nagoyameshi-wrapper" sec:authorize="hasRole('ROLE_PAID')">
         <!-- ヘッダー -->
         <div th:replace="~{fragment :: header}"></div>
         

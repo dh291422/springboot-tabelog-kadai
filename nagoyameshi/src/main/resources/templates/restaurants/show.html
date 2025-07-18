@@ -27,7 +27,7 @@
                            </nav>
 						   
 						   <!-- お気に入り機能 ここから -->
-						   <div sec:authorize="isAuthenticated()">
+						   <div sec:authorize="isAuthenticated()" th:if="${user.subscriptionId != null}">
 						       <div th:if="${favoriteFlag}">
 						           <a href="#" onclick="event.preventDefault(); document.getElementById('favorite-form').submit();">&#9829; お気に入り解除</a>
 						           <form method="post" th:action="@{/restaurants/{restaurantId}/favorites/{favoriteId}/delete(restaurantId=${restaurant.getId()}, favoriteId=${favorite.getId()})}" id="favorite-form"></form>
